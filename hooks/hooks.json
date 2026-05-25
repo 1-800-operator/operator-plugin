@@ -1,0 +1,36 @@
+{
+  "$schema": "Operator hook event registry. All handlers are gated on $OPERATOR_SESSION_DIR — when the env var is unset (the user's normal Claude Code sessions), the scripts exit 0 immediately and write nothing. Only operator's inner-claude subprocess inherits this var (set by the operator CLI before the PTY spawn), so the hooks are effectively scoped to meetings.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/scripts/session_start.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/scripts/stop.sh"
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/scripts/permission_request.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
